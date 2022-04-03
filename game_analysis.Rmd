@@ -14,7 +14,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r include=FALSE}
 # packages
 library(tidyverse)
-library(dbplyr)
+library(dplyr)
+library(ggplot2)
 ```
 
 ```{r load data}
@@ -37,7 +38,77 @@ summary(games1)
 head(games1, 10)
 ```
 
-```{r}
+# Now we do some data anaylsis and visualize them
+## we will analysis the following topics
+### 1. the top 5 game sales in global, North Aemerica, Japan, Europe scale
 
+#### the top 5 game sales in global scale
+```{r}
+#the top 5 game sales in global scale
+top5sales.global <- games1 %>% 
+  # order data with descending Global_Sales
+  arrange(desc(Global_Sales)) %>%
+  # only select two column: Name, Global_Sales
+  select(Name,Global_Sales) %>% 
+  slice_head(n=5) %>%
+  print
+```
+```{r}
+ggplot(data=top5sales.global)+
+   geom_col(mapping = aes(x=Name, y =  Global_Sales),fill=row.names(top5sales.global))
 ```
 
+#### the top 5 game sales in North America
+```{r}
+#the top 5 game sales in NA
+top5sales.NA <- games1 %>% 
+  # order data with descending Global_Sales
+  arrange(desc(NA_Sales)) %>%
+  # only select two column: Name, Global_Sales
+  select(Name,NA_Sales) %>% 
+  slice_head(n=5) %>%
+  print
+```
+```{r}
+ggplot(data=top5sales.NA)+
+   geom_col(mapping = aes(x=Name, y =  NA_Sales),fill=row.names(top5sales.NA))
+```
+
+#### the top 5 game sales in Japan
+```{r}
+#the top 5 game sales in Japan scale
+top5sales.JP <- games1 %>% 
+  # order data with descending Japan
+  arrange(desc(JP_Sales)) %>%
+  # only select two column: Name, Japan
+  select(Name,JP_Sales) %>% 
+  slice_head(n=5) %>%
+  print
+```
+```{r}
+ggplot(data=top5sales.JP)+
+   geom_col(mapping = aes(x=Name, y =  JP_Sales),fill=row.names(top5sales.JP))
+```
+#### the top 5 game sales in Europe
+```{r}
+#the top 5 game sales in EU scale
+top5sales.EU <- games1 %>% 
+  # order data with descending Japan
+  arrange(desc(EU_Sales)) %>%
+  # only select two column: Name, Japan
+  select(Name,EU_Sales) %>% 
+  slice_head(n=5) %>%
+  print
+```
+```{r}
+ggplot(data=top5sales.EU)+
+   geom_col(mapping = aes(x=Name, y = EU_Sales),fill=row.names(top5sales.EU))
+```
+
+
+
+### 2. the top 3 favoriate game genre in global, North Aemerica, Japan, Europe scale
+
+### 3. for each of the top 5 popular platform, the most welcomed game (highist sales)
+
+### 4. etc.
