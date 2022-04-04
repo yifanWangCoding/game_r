@@ -38,11 +38,14 @@ summary(games1)
 head(games1, 10)
 ```
 
-# Now we do some data anaylsis and visualize them
+# Now we do some data analysis and visualize them
+
 ## we will analysis the following topics
-### 1. the top 5 game sales in global, North Aemerica, Japan, Europe scale
+
+### 1. the top 5 game sales in global, North America, Japan, Europe scale
 
 #### the top 5 game sales in global scale
+
 ```{r}
 #the top 5 game sales in global scale
 top5sales.global <- games1 %>% 
@@ -53,12 +56,14 @@ top5sales.global <- games1 %>%
   slice_head(n=5) %>%
   print
 ```
+
 ```{r}
 ggplot(data=top5sales.global)+
    geom_col(mapping = aes(x=Name, y =  Global_Sales),fill=row.names(top5sales.global))
 ```
 
 #### the top 5 game sales in North America
+
 ```{r}
 #the top 5 game sales in NA
 top5sales.NA <- games1 %>% 
@@ -69,12 +74,14 @@ top5sales.NA <- games1 %>%
   slice_head(n=5) %>%
   print
 ```
+
 ```{r}
 ggplot(data=top5sales.NA)+
    geom_col(mapping = aes(x=Name, y =  NA_Sales),fill=row.names(top5sales.NA))
 ```
 
 #### the top 5 game sales in Japan
+
 ```{r}
 #the top 5 game sales in Japan scale
 top5sales.JP <- games1 %>% 
@@ -85,11 +92,14 @@ top5sales.JP <- games1 %>%
   slice_head(n=5) %>%
   print
 ```
+
 ```{r}
 ggplot(data=top5sales.JP)+
    geom_col(mapping = aes(x=Name, y =  JP_Sales),fill=row.names(top5sales.JP))
 ```
+
 #### the top 5 game sales in Europe
+
 ```{r}
 #the top 5 game sales in EU scale
 top5sales.EU <- games1 %>% 
@@ -100,15 +110,87 @@ top5sales.EU <- games1 %>%
   slice_head(n=5) %>%
   print
 ```
+
 ```{r}
 ggplot(data=top5sales.EU)+
    geom_col(mapping = aes(x=Name, y = EU_Sales),fill=row.names(top5sales.EU))
 ```
 
+### 2. the top 3 favoriate game genres in global, North Aemerica, Japan, Europe scale
+#### we want to know is there any difference of game gerne preference among difference areas
+##### for now we use the amount of sales to decide if a genre is welcomed
+
+#### top 3 favoriate game genres in global scale
+```{r}
+top3genre.global <- games1 %>%
+  group_by(Genre) %>%
+  summarise(genre.sales = sum(Global_Sales)) %>%
+  arrange(desc(genre.sales)) %>%
+  slice_head(n=3) %>%
+  print
+```
+#### top 3 favoriate game genres in North America scale
+```{r}
+top3genre.NA <- games1 %>%
+  group_by(Genre) %>%
+  summarise(genre.sales = sum(NA_Sales)) %>%
+  arrange(desc(genre.sales)) %>%
+  slice_head(n=3) %>%
+  print
+```
+
+#### top 3 favoriate game genres in JP scale
+```{r}
+top3genre.JP <- games1 %>%
+  group_by(Genre) %>%
+  summarise(genre.sales = sum(JP_Sales)) %>%
+  arrange(desc(genre.sales)) %>%
+  slice_head(n=3) %>%
+  print
+```
 
 
-### 2. the top 3 favoriate game genre in global, North Aemerica, Japan, Europe scale
+#### top 3 favoriate game genres in global scale
+```{r}
+top3genre.EU <- games1 %>%
+  group_by(Genre) %>%
+  summarise(genre.sales = sum(EU_Sales)) %>%
+  arrange(desc(genre.sales)) %>%
+  slice_head(n=3) %>%
+  print
+```
+
 
 ### 3. for each of the top 5 popular platform, the most welcomed game (highist sales)
+
+#### the top 5 popular platform
+```{r}
+popular5platfrom <- games1 %>%
+  group_by(Platform) %>%
+  summarise(genre.sales = sum(Global_Sales)) %>%
+  arrange(desc(genre.sales)) %>%
+  slice_head(n=5) %>%
+  print
+
+popular5platfrom <- popular5platfrom$Platform
+print(popular5platfrom)
+```
+
+# the most welcomed game on each top 5 populor platform
+```{r}
+welcomedGames.platform <- data.frame()
+
+for (i in 1:5){
+  game.plat <- games1 %>%
+    filter(Platform == popular5platfrom[i]) %>%
+    arrange(desc(Global_Sales)) %>%
+    slice_head(n=1) %>%
+    select(Platform,Name,Global_Sales)
+  
+  welcomedGames.platform <- rbind(welcomedGames.platform, game.plat)
+}
+
+print(welcomedGames.platform)
+```
 
 ### 4. etc.
