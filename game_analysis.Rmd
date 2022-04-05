@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(dplyr)
 library(ggplot2)
+library(viridis)
 ```
 
 ```{r load data}
@@ -56,10 +57,14 @@ top5sales.global <- games1 %>%
   slice_head(n=5) %>%
   print
 ```
-
 ```{r}
 ggplot(data=top5sales.global)+
-   geom_col(mapping = aes(x=Name, y =  Global_Sales),fill=row.names(top5sales.global))
+  geom_bar(aes(reorder(Name, Global_Sales), Global_Sales,fill = Global_Sales), stat = 'identity') + 
+  scale_fill_viridis_c() +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1,face="bold")) + labs(
+    title = 'top 5 game sales in global scale',
+    x = 'Name') 
 ```
 
 #### the top 5 game sales in North America
@@ -77,7 +82,12 @@ top5sales.NA <- games1 %>%
 
 ```{r}
 ggplot(data=top5sales.NA)+
-   geom_col(mapping = aes(x=Name, y =  NA_Sales),fill=row.names(top5sales.NA))
+  geom_bar(aes(reorder(Name, NA_Sales), NA_Sales,fill = NA_Sales), stat = 'identity') + 
+  scale_fill_viridis_c() +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1,face="bold")) + labs(
+    title = 'top 5 game sales in North America scale',
+    x = 'Name') 
 ```
 
 #### the top 5 game sales in Japan
@@ -95,7 +105,12 @@ top5sales.JP <- games1 %>%
 
 ```{r}
 ggplot(data=top5sales.JP)+
-   geom_col(mapping = aes(x=Name, y =  JP_Sales),fill=row.names(top5sales.JP))
+  geom_bar(aes(reorder(Name, JP_Sales), JP_Sales,fill = JP_Sales), stat = 'identity') + 
+  scale_fill_viridis_c() +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1,face="bold")) + labs(
+    title = 'top 5 game sales in North Japan scale',
+    x = 'Name') 
 ```
 
 #### the top 5 game sales in Europe
@@ -113,7 +128,12 @@ top5sales.EU <- games1 %>%
 
 ```{r}
 ggplot(data=top5sales.EU)+
-   geom_col(mapping = aes(x=Name, y = EU_Sales),fill=row.names(top5sales.EU))
+  geom_bar(aes(reorder(Name, EU_Sales), EU_Sales,fill = EU_Sales), stat = 'identity') + 
+  scale_fill_viridis_c() +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1,face="bold")) + labs(
+    title = 'top 5 game sales in North Europe scale',
+    x = 'Name') 
 ```
 
 ### 2. the top 3 favoriate game genres in global, North Aemerica, Japan, Europe scale
@@ -139,7 +159,7 @@ top3genre.NA <- games1 %>%
   print
 ```
 
-#### top 3 favoriate game genres in JP scale
+#### top 3 favoriate game genres in Japan scale
 ```{r}
 top3genre.JP <- games1 %>%
   group_by(Genre) %>%
@@ -150,7 +170,7 @@ top3genre.JP <- games1 %>%
 ```
 
 
-#### top 3 favoriate game genres in global scale
+#### top 3 favoriate game genres in Europe scale
 ```{r}
 top3genre.EU <- games1 %>%
   group_by(Genre) %>%
@@ -159,6 +179,7 @@ top3genre.EU <- games1 %>%
   slice_head(n=3) %>%
   print
 ```
+
 
 
 ### 3. for each of the top 5 popular platform, the most welcomed game (highist sales)
