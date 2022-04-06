@@ -137,10 +137,9 @@ ggplot(data=top5sales.EU)+
 ```
 
 ### 2. the top 3 favoriate game genres in global, North Aemerica, Japan, Europe scale
-#### we want to know is there any difference of game gerne preference among difference areas
-##### for now we use the amount of sales to decide if a genre is welcomed
+we want to know is there any difference of game genre preference among difference areas. For now ,we use the amount of sales to decide if a genre is welcomed
 
-#### top 3 favoriate game genres in global scale
+#### top 3   favoriate game genres in global scale
 ```{r}
 top3genre.global <- games1 %>%
   group_by(Genre) %>%
@@ -197,7 +196,7 @@ popular5platfrom <- popular5platfrom$Platform
 print(popular5platfrom)
 ```
 
-# the most welcomed game on each top 5 populor platform
+#### the most welcomed game on each top 5 populor platform
 ```{r}
 welcomedGames.platform <- data.frame()
 
@@ -214,4 +213,43 @@ for (i in 1:5){
 print(welcomedGames.platform)
 ```
 
-### 4. etc.
+### 4. 
+#### 4.1 the yearly sales trend 
+```{r}
+sales.year <- games1 %>% 
+  group_by(Year) %>%
+  summarise(year_sales = sum(Global_Sales)) %>%
+  print
+```
+
+```{r}
+ggplot(data=sales.year) +
+  geom_line(mapping = aes(x=as.double(Year), y=year_sales))
+```
+
+#### 4.2 year and genre preference
+```{r}
+games1 %>% 
+  # set year interval = 4 year
+  # can be changed
+  mutate(ranges = cut(as.numeric(Year),
+                      seq(1980, 2020, 4))) %>% 
+  group_by(ranges,Genre) %>%
+  summarise(sales = sum(Global_Sales)) %>%
+  arrange(desc(sales),.by_group = T) %>%
+  slice_head(n=1)
+```
+Since the data during 2016 and 2020 are limited, we simply don't consider (2016,2020] for this question. 
+
+
+### 5. which publisher makes the best-sale game in certain gerne
+```{r}
+games1 %>%
+  group_by(Genre, Publisher) %>%
+  summarise(sales = sum(Global_Sales)) %>%
+  arrange(desc(sales),.by_group = T) %>%
+  slice_head(n=1)
+  
+```
+
+
