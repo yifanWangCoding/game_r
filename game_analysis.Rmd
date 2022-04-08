@@ -2,14 +2,16 @@
 title: "game_analysis"
 author: "Yifan Wang"
 date: '2022-04-02'
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Prepare for analysis
+# phase1: Prepare for analysis
 
 ### load packages
 
@@ -23,7 +25,6 @@ library(rworldmap)
 ```
 
 ### load data
-
 ```{r load data}
 # load data
 games <- read.csv('/Users/yifanwang/Desktop/vgsales.csv')
@@ -34,19 +35,41 @@ games1<- games[games$Year != "N/A",]
 games1$Rank <- NULL
 ```
 
+#### take a quick look of our data
 ```{r}
-# take a quick look of our data
 summary(games1)
 ```
 
+#### show the first 10 observations
 ```{r}
-# show the first 10 observations
 head(games1, 10)
 ```
 
-# Now we do some data analysis and visualize them
+
+# phase2: Now we do some data analysis and make data visulization
 
 ## we will analysis the following topics
+### topic overview
+1. the top 5 game sales in global, North America, Japan, Europe scale
+- 1.1 the top 5 game sales in global scale
+- 1.2 the top 5 game sales in North America
+- 1.3 the top 5 game sales in Japan
+- 1.4 the top 5 game sales in Europe
+
+2. the top 3 favorite game genres in global, North America, Japan, Europe scale
+- 2.1 top 3 favorite game genres in global scale
+- 2.2 top 3 favorite game genres in North America scale
+- 2.3 top 3 favorite game genres in Japan scale
+- 2.4 top 3 favorite game genres in Europe scale
+
+3. for each of the top 5 popular platform, the most welcomed game (highest sales)
+
+4. 
+- 4.1 the yearly sales trend
+- 4.2 genre preference in different time intervals
+
+5. the best publisher in certain genre
+
 
 ### 1. the top 5 game sales in global, North America, Japan, Europe scale
 
@@ -70,7 +93,8 @@ ggplot(data=top5sales.global)+
   theme_minimal() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1,face="bold")) + labs(
     title = 'top 5 game sales in global scale',
-    x = 'Name') 
+    x = 'game',
+    y = 'global sales') 
 ```
 
 #### 1.2 the top 5 game sales in North America
@@ -92,8 +116,9 @@ ggplot(data=top5sales.NA)+
   scale_fill_viridis_c() +
   theme_minimal() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1,face="bold")) + labs(
-    title = 'top 5 game sales in North America scale',
-    x = 'Name') 
+    title = 'top 5 game sales in North America',
+    x = 'game',
+    y = 'global sales') 
 ```
 
 #### 1.3 the top 5 game sales in Japan
@@ -115,8 +140,9 @@ ggplot(data=top5sales.JP)+
   scale_fill_viridis_c() +
   theme_minimal() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1,face="bold")) + labs(
-    title = 'top 5 game sales in North Japan scale',
-    x = 'Name') 
+    title = 'top 5 game sales in Japan',
+    x = 'game',
+    y = 'global sales') 
 ```
 
 #### 1.4 the top 5 game sales in Europe
@@ -138,15 +164,16 @@ ggplot(data=top5sales.EU)+
   scale_fill_viridis_c() +
   theme_minimal() + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1,face="bold")) + labs(
-    title = 'top 5 game sales in North Europe scale',
-    x = 'Name') 
+    title = 'top 5 game sales in Europe',
+    x = 'game',
+    y = 'global sales') 
 ```
 
-### 2. the top 3 favoriate game genres in global, North Aemerica, Japan, Europe scale
+### 2. the top 3 favorite game genres in global, North Aemerica, Japan, Europe scale
 
-we want to know is there any difference of game genre preference among difference areas. For now ,we use the amount of sales to decide if a genre is welcomed
+we want to know is there any difference of game genre preference among difference areas. For now, we use the amount of sales to decide if a genre is welcomed.
 
-#### 2.1 top 3 favoriate game genres in global scale
+#### 2.1 top 3 favorite game genres in global scale
 
 ```{r}
 top3genre.global <- games1 %>%
@@ -159,7 +186,7 @@ top3genre.global <- games1 %>%
 
 ```{r}
 ggplot(data=top3genre.global)+
-  geom_bar(aes(reorder(Genre, genre.sales), genre.sales,fill = genre.sales), stat = 'identity') + 
+  geom_col(aes(reorder(Genre, genre.sales), genre.sales,fill = genre.sales), stat = 'identity') + 
   scale_fill_viridis_c() +
   theme_minimal() + 
   theme(axis.text.x = element_text(size = 10, hjust = 1,face="bold")) + labs(
@@ -167,7 +194,7 @@ ggplot(data=top3genre.global)+
     x = 'Genre') 
 ```
 
-#### 2.2 top 3 favoriate game genres in North America scale
+#### 2.2 top 3 favorite game genres in North America 
 
 ```{r}
 top3genre.NA <- games1 %>%
@@ -180,7 +207,7 @@ top3genre.NA <- games1 %>%
 
 ```{r}
 ggplot(data=top3genre.NA)+
-  geom_bar(aes(reorder(Genre, genre.sales), genre.sales,fill = genre.sales), stat = 'identity') + 
+  geom_col(aes(reorder(Genre, genre.sales), genre.sales,fill = genre.sales), stat = 'identity') + 
   scale_fill_viridis_c() +
   theme_minimal() + 
   theme(axis.text.x = element_text(size = 10, hjust = 1,face="bold")) + labs(
@@ -188,7 +215,7 @@ ggplot(data=top3genre.NA)+
     x = 'Genre') 
 ```
 
-#### 2.3 top 3 favoriate game genres in Japan scale
+#### 2.3 top 3 favorite game genres in Japan
 
 ```{r}
 top3genre.JP <- games1 %>%
@@ -201,7 +228,7 @@ top3genre.JP <- games1 %>%
 
 ```{r}
 ggplot(data=top3genre.JP)+
-  geom_bar(aes(reorder(Genre, genre.sales), genre.sales,fill = genre.sales), stat = 'identity') + 
+  geom_col(aes(reorder(Genre, genre.sales), genre.sales,fill = genre.sales), stat = 'identity') + 
   scale_fill_viridis_c() +
   theme_minimal() + 
   theme(axis.text.x = element_text(size = 10, hjust = 1,face="bold")) + labs(
@@ -209,7 +236,7 @@ ggplot(data=top3genre.JP)+
     x = 'Genre') 
 ```
 
-#### 2.4 top 3 favoriate game genres in Europe scale
+#### 2.4 top 3 favorite game genres in Europe
 
 ```{r}
 top3genre.EU <- games1 %>%
@@ -222,7 +249,7 @@ top3genre.EU <- games1 %>%
 
 ```{r}
 ggplot(data=top3genre.EU)+
-  geom_bar(aes(reorder(Genre, genre.sales), genre.sales,fill = genre.sales), stat = 'identity') + 
+  geom_col(aes(reorder(Genre, genre.sales), genre.sales,fill = genre.sales), stat = 'identity') + 
   scale_fill_viridis_c() +
   theme_minimal() + 
   theme(axis.text.x = element_text(size = 10, hjust = 1,face="bold")) + labs(
@@ -230,7 +257,7 @@ ggplot(data=top3genre.EU)+
     x = 'Genre') 
 ```
 
-### 3. for each of the top 5 popular platform, the most welcomed game (highist sales)
+### 3. for each of the top 5 popular platform, the most welcomed game (highest sales)
 
 #### the top 5 popular platform
 
@@ -284,10 +311,20 @@ print(welcomedGames.platform)
 
 ### 4.
 
+```{r}
+# we want to show how many games were published in a given year
+freq_year <- data.frame(cbind(Frequency = table(games1$Year), Percent = prop.table(table(games1$Year)) * 100))
+freq_year <- freq_year[order(freq_year$Frequency, decreasing=TRUE), ]
+freq_year
+```
+we notice that there isn't enough data after 2017. This may result from un-undated data or something else. We simply ignore data after 2017 for this part.
+
 #### 4.1 the yearly sales trend
 
 ```{r}
 sales.year <- games1 %>% 
+  # only use games published before 2017
+  filter(as.double(Year)<2017) %>%
   group_by(Year) %>%
   summarise(year_sales = sum(Global_Sales)) %>%
   print
@@ -295,27 +332,33 @@ sales.year <- games1 %>%
 
 ```{r}
 ggplot(data=sales.year) +
-  geom_line(mapping = aes(x=as.double(Year), y=year_sales))
+  geom_line(mapping = aes(x=as.double(Year), y=year_sales)) + 
+  theme_minimal() + 
+  theme(axis.text.x = element_text(size = 10, hjust = 1,face="bold")) + labs(
+    title = 'the yearly sales trend',
+    x = 'Year', y= 'global sales') 
 ```
+Here, we can see that there is a decreasing sales after 2008. This trend may result from technology upgrade. New games are published in some new platform, such as PS4 PS5. Our data don't include these new data. New data may be required to make a better analysis for this topic.
 
-#### 4.2 year and genre preference
+#### 4.2 genre preference in different time intervals
 
 ```{r}
 games1 %>% 
+  # only use games published before 2017
+  filter(as.double(Year)<2017) %>%
   # set year interval = 4 year
   # can be changed
   mutate(ranges = cut(as.numeric(Year),
-                      seq(1980, 2020, 4))) %>% 
+                      seq(1980, 2016, 4))) %>% 
   group_by(ranges,Genre) %>%
   summarise(sales = sum(Global_Sales)) %>%
   arrange(desc(sales),.by_group = T) %>%
   slice_head(n=1)
 ```
 
-Since the data during 2016 and 2020 are limited, we simply don't consider (2016,2020] for this question.
+We do see differences of game genre preference during different times.
 
-### 5. which publisher makes the best-sale game in certain gerne
-
+### 5. the best publisher in certain genre
 ```{r}
 games1 %>%
   group_by(Genre, Publisher) %>%
